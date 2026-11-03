@@ -1,42 +1,48 @@
-# TaxWise AI - Tax Saving Guide for Beginners 🇮🇳
+# TaxWise AI: Intelligent Tax Saving Guide for Beginners 🇮🇳
 
-An AI-powered, beginner-friendly Indian Income Tax web application that calculates tax liability, compares the **Old vs. New Tax Regime** (FY 2024-25 / FY 2025-26), visualizes deductions, and provides educational tax guidance powered by **Google Gemini** and a grounded tax knowledge base.
+TaxWise AI is a responsive Indian income-tax guidance prototype for beginners, students, and young professionals.
 
----
-
-## 🚀 Key Features
-
-1. **Interactive Income Tax Calculator**:
-   - Computes tax for salaried individuals and professionals.
-   - Handles standard deduction (₹75,000 for New Regime / ₹50,000 for Old Regime).
-   - Accurately computes Section 87A rebate (zero tax up to ₹12.75 Lakhs under New Regime for salaried) and marginal relief.
-   - Surcharge and 4% Health & Education cess.
-
-2. **Old vs. New Tax Regime Comparison**:
-   - Side-by-side comparison table.
-   - Direct savings indicator showing which regime saves more money and the exact amount saved.
-   - Slab-by-slab tax breakdown.
-
-3. **Smart Tax Breakdown Donut Chart**:
-   - Visual distribution of Take-Home Salary, Total Tax Payable, and Deductions/Exemptions rendered via Chart.js.
-
-4. **Tax-Saving Recommendations Engine**:
-   - Analyzes unutilized limits in Section 80C (up to ₹1.5L), Section 80D (Health Insurance up to ₹25k/₹50k), and Section 80CCD(1B) (NPS extra ₹50k).
-   - Shows potential tax savings if unused headroom is invested.
-
-5. **AI Tax Assistant ("Ask TaxWise AI")**:
-   - Powered by Google Gemini (`google-genai` SDK) with domain guardrails.
-   - Grounded Indian Tax Knowledge Base for instant responses to common questions (80C, 80D, HRA, 87A, NPS, ELSS vs PPF, etc.).
-   - Pre-configured quick prompt chips for common beginner queries.
+The platform combines the **five mandatory architectural pillars**:
+1. **RAG (Retrieval-Augmented Generation)**: Local TF-IDF retrieval over curated tax passages, filtered by financial year and returned with source metadata. The current prototype does not ingest PDFs or use an external vector database.
+2. **NLP + LLM Conversational Layer**: Natural language question understanding with an "Explain Like I'm a Beginner" toggle and multi-turn context retention.
+3. **Rule-Based Tax Calculation Engine**: Versioned by Financial Year (`FY 2024-25` and `FY 2025-26`). Deterministic calculations that never rely on LLMs for financial arithmetic.
+4. **Personalized Tax-Saving Recommendation Engine**: Evaluates financial profiles against statutory rules and classifies opportunities into *Eligible*, *Potentially Eligible*, *Requires Additional Information*, and *Not Applicable*.
+5. **Explainable AI (XAI) Layer**: Visible "Why am I seeing this?" transparency expander detailing triggering inputs, rules, logic, and missing information for every recommendation.
 
 ---
 
-## 🛠️ Technology Stack
+## 🏛️ System Architecture
 
-- **Backend**: Python 3.10+ / 3.14, Flask, python-dotenv
-- **AI Integration**: Google GenAI SDK (`google-genai`), Gemini 2.5 Flash
-- **Frontend**: HTML5, Vanilla CSS3 (Custom design system), Vanilla JavaScript
-- **Data Visualization**: Chart.js
+```text
+                                USER
+                                 │
+                                 ▼
+                     ┌───────────────────────┐
+                     │    Web Application    │
+                     │  Dashboard & Chat UI  │
+                     └───────────┬───────────┘
+                                 │
+          ┌──────────────────────┴──────────────────────┐
+          ▼                                             ▼
+Natural Language Question                     Financial Profile & Inputs
+          │                                             │
+          ▼                                             ▼
+      NLP + LLM                                 Rule-Based Engine
+          │                                             │
+          ▼                                             ▼
+     RAG Pipeline                                Tax Calculation
+          │                                             │
+          ▼                                             ▼
+  Tax Knowledge Base                          Recommendation Engine
+          │                                             │
+          └──────────────────────┬──────────────────────┘
+                                 │
+                                 ▼
+                        Explainable AI Layer
+                                 │
+                                 ▼
+                        Final User Response
+```
 
 ---
 
@@ -44,21 +50,27 @@ An AI-powered, beginner-friendly Indian Income Tax web application that calculat
 
 ```text
 TaxWise AI/
-├── app.py                 # Flask server & REST API endpoints
-├── tax_engine.py          # Deterministic Indian income tax calculation engine
-├── ai_assistant.py        # Gemini AI assistant & verified knowledge base
-├── requirements.txt       # Python dependencies (Flask, google-genai, python-dotenv)
-├── .env.example           # Environment template
-├── .env                   # Local environment configuration
-├── .gitignore             # Standard git exclusions
-├── README.md              # Project documentation
+├── app.py                      # Flask server & REST API endpoints
+├── tax_engine.py               # Deterministic Rule-Based Tax Calculator (TaxCalculator class)
+├── recommendation_engine.py    # Personalized Tax Recommendation & Ranking Engine
+├── explainable_ai.py           # Explainable AI layer ("Why am I seeing this?")
+├── rag_engine.py               # In-memory TF-IDF retrieval over maintained passages
+├── ai_assistant.py             # NLP + LLM assistant with Gemini API & grounded knowledge base
+├── education_content.py        # Tax Education Center & Document Explainer data
+├── admin_engine.py             # Admin telemetry, rule versioning, and document viewer
+├── auth.py                     # User authentication, password hashing, and profile management
+├── database.py                 # SQLite database schema, versioned tax rules, and models
+├── test_taxwise.py             # Comprehensive test suite covering calculations, RAG, and APIs
+├── PROJECT_DOCUMENTATION.md    # 26-chapter technical documentation specification
+├── requirements.txt            # Python dependencies
+├── .env.example                # Environment configuration template
 ├── templates/
-│   └── index.html         # Modern finance dashboard single-page interface
+│   └── index.html              # Modern, responsive single-page application with 10 navigation views
 └── static/
     ├── css/
-    │   └── style.css      # Cohesive design system & responsive styling
+    │   └── style.css           # Premium FinTech design system (Navy/Blue/Green, responsive)
     └── js/
-        └── app.js         # Real-time reactivity, Chart.js updates, chat controller
+        └── app.js              # 8-step wizard controller, Chart.js donut chart, RAG chat controller
 ```
 
 ---
@@ -66,45 +78,41 @@ TaxWise AI/
 ## ⚡ Quick Start Guide
 
 ### 1. Prerequisites
-- Python 3.10 or higher installed ([Download Python](https://www.python.org/downloads/)).
-- (Optional) Free Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey).
+- Python 3.10 or higher installed.
 
-### 2. Setup Virtual Environment & Install Dependencies
-Open a terminal in the project directory:
-
-```bash
-# Create virtual environment (optional but recommended)
-python -m venv .venv
-
-# Activate on Windows PowerShell:
-.\.venv\Scripts\Activate.ps1
-# Or on Windows Command Prompt:
-.\.venv\Scripts\activate.bat
-
-# Install dependencies:
+### 2. Install Dependencies
+```powershell
 pip install -r requirements.txt
 ```
 
-### 3. Configure Environment Variables
-Copy `.env.example` to `.env`:
-
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
-PORT=5000
+### 3. Configure Local Secrets
+```powershell
+Copy-Item .env.example .env
 ```
-> *Note: If you don't have an API key yet, the app runs smoothly with the built-in verified Indian tax knowledge base!*
+Set a private random `SECRET_KEY` and a separate `ADMIN_API_TOKEN` in `.env`. Leave `SESSION_COOKIE_SECURE=0` for local HTTP; set it to `1` when serving the app over HTTPS.
 
-### 4. Run the Application
-```bash
+### 4. Run the Automated Test Suite
+```powershell
+python test_taxwise.py
+```
+
+### 5. Run the Application
+```powershell
 python app.py
 ```
 
 Open your browser at:
-👉 **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
+👉 **[http://localhost:5000](http://localhost:5000)**
+
+## Prototype Boundaries
+- Knowledge passages and their citation metadata are maintained in code; PDF/web ingestion, embedding generation, and persistent vector indexing are not implemented.
+- Source links currently point to the Income Tax Department portal, not to an independently verified document page for every passage. Verify current statutes before relying on a tax claim.
+- Password changes require an authenticated session and the current password. Email-based forgotten-password recovery is not configured.
+- Admin telemetry and rule writes require the separately configured `ADMIN_API_TOKEN`.
+- Tax estimates are not certified filing calculations; the supported years are FY 2024-25 and FY 2025-26.
 
 ---
 
 ## ⚖️ Disclaimer
 
-TaxWise AI is designed for educational and informational purposes only. Income tax liability may vary based on individual circumstances, special rate income, and updates from the Central Board of Direct Taxes (CBDT). Users should verify specific calculations with official government portals ([incometax.gov.in](https://www.incometax.gov.in)) or a certified Chartered Accountant.
+TaxWise AI provides educational information and estimates based on the information available in its knowledge base. Tax rules may change, and eligibility depends on individual circumstances. Always verify current rules using official sources or consult a qualified tax professional before filing or making financial decisions.
