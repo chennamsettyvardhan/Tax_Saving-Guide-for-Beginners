@@ -11,6 +11,8 @@ Validates:
 
 import unittest
 import json
+import os
+from unittest.mock import patch
 from tax_engine import TaxCalculator
 from recommendation_engine import evaluate_recommendations
 from explainable_ai import generate_explanation, explain_all_recommendations
@@ -18,6 +20,19 @@ import rag_engine
 import ai_assistant
 from app import app
 import auth
+import database
+
+
+class TestDatabaseConfiguration(unittest.TestCase):
+    def test_database_connection_requires_a_postgres_url(self):
+        with patch.dict(os.environ, {"DATABASE_URL": "", "SUPABASE_DB_URL": ""}):
+            with self.assertRaisesRegex(RuntimeError, "Set DATABASE_URL"):
+                database.get_db_connection()
+
+
+class TestApplicationStartup(unittest.TestCase):
+    def test_app_import_does_not_initialize_database(self):
+        self.assertIsNotNone(app)
 
 
 class TestTaxEngine(unittest.TestCase):

@@ -8,7 +8,6 @@ Implements:
 - Protection against unauthorized data access
 """
 
-import sqlite3
 from typing import Dict, Any, Optional
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import get_db_connection
@@ -31,21 +30,21 @@ def register_user(name: str, email: str, password: str) -> Dict[str, Any]:
     cursor = conn.cursor()
 
     try:
-        cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
         if cursor.fetchone():
             conn.close()
             return {"success": False, "error": "An account with this email already exists."}
 
         cursor.execute(
-            "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+            "INSERT INTO users (name, email, password_hash) VALUES (%s, %s, %s) RETURNING id",
             (name, email, password_hash)
         )
-        user_id = cursor.lastrowid
+        user_id = cursor.fetchone()["id"]
 
         # Initialize default tax profile for this user
         cursor.execute(
             "INSERT INTO tax_profiles (user_id, financial_year, income, employment_type, age, other_income, regime) "
-            "VALUES (?, 'FY 2025-26', 1200000.0, 'salaried', 28, 0.0, 'new')",
+            "VALUES (%s, 'FY 2025-26', 1200000.0, 'salaried', 28, 0.0, 'new')",
             (user_id,)
         )
         conn.commit()
@@ -71,7 +70,7 @@ def authenticate_user(email: str, password: str) -> Dict[str, Any]:
     cursor = conn.cursor()
 
     try:
-        cursor.execute("SELECT id, name, email, password_hash FROM users WHERE email = ?", (email,))
+        cursor.execute("SELECT id, name, email, password_hash FROM users WHERE email = %s", (email,))
         row = cursor.fetchone()
         if not row:
             return {"success": False, "error": "Invalid email or password."}
@@ -102,12 +101,12 @@ def reset_user_password(email: str, new_password: str) -> Dict[str, Any]:
     cursor = conn.cursor()
 
     try:
-        cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
         row = cursor.fetchone()
         if not row:
             return {"success": False, "error": "No account found with this email address."}
 
-        cursor.execute("UPDATE users SET password_hash = ? WHERE email = ?", (password_hash, email))
+        cursor.execute("UPDATE users SET password_hash = %s WHERE email = %s", (password_hash, email))
         conn.commit()
         return {"success": True, "message": "Password updated successfully."}
     finally:
@@ -120,19 +119,19 @@ def get_user_profile(user_id: int) -> Dict[str, Any]:
     cursor = conn.cursor()
 
     try:
-        cursor.execute("SELECT id, name, email FROM users WHERE id = ?", (user_id,))
+        cursor.execute("SELECT id, name, email FROM users WHERE id = %s", (user_id,))
         user_row = cursor.fetchone()
         if not user_row:
             return {"error": "User not found"}
 
         cursor.execute(
-            "SELECT * FROM tax_profiles WHERE user_id = ? ORDER BY id DESC LIMIT 1",
+            "SELECT * FROM tax_profiles WHERE user_id = %s ORDER BY id DESC LIMIT 1",
             (user_id,)
         )
         profile_row = cursor.fetchone()
 
         cursor.execute(
-            "SELECT category, amount, description FROM financial_inputs WHERE user_id = ?",
+            "SELECT category, amount, description FROM financial_inputs WHERE user_id = %s",
             (user_id,)
         )
         inputs_rows = cursor.fetchall()
@@ -171,29 +170,29 @@ def update_user_profile(user_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
         fy = str(data.get("financial_year", "FY 2025-26"))
 
         # Upsert tax profile
-        cursor.execute("SELECT id FROM tax_profiles WHERE user_id = ?", (user_id,))
+        cursor.execute("SELECT id FROM tax_profiles WHERE user_id = %s", (user_id,))
         existing = cursor.fetchone()
         if existing:
             cursor.execute("""
             UPDATE tax_profiles
-            SET financial_year = ?, income = ?, employment_type = ?, age = ?, other_income = ?, regime = ?, updated_at = CURRENT_TIMESTAMP
-            WHERE user_id = ?
+            SET financial_year = %s, income = %s, employment_type = %s, age = %s, other_income = %s, regime = %s, updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = %s
             """, (fy, income, employment_type, age, other_income, regime, user_id))
         else:
             cursor.execute("""
             INSERT INTO tax_profiles (user_id, financial_year, income, employment_type, age, other_income, regime)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             """, (user_id, fy, income, employment_type, age, other_income, regime))
 
         # Update itemized financial inputs
         inputs = data.get("financial_inputs", {})
-        cursor.execute("DELETE FROM financial_inputs WHERE user_id = ?", (user_id,))
+        cursor.execute("DELETE FROM financial_inputs WHERE user_id = %s", (user_id,))
 
         for category, amount in inputs.items():
             if amount is not None and float(amount) >= 0:
                 cursor.execute("""
                 INSERT INTO financial_inputs (user_id, category, amount, financial_year)
-                VALUES (?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s)
                 """, (user_id, category, float(amount), fy))
 
         conn.commit()

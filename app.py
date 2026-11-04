@@ -336,17 +336,19 @@ def chat_api():
         # Store in chat history table if user is logged in
         user_id = session.get("user_id")
         if user_id:
+            conn = None
             try:
                 conn = database.get_db_connection()
-                cursor = conn.cursor()
-                cursor.execute(
-                    "INSERT INTO chat_history (user_id, question, answer, sources) VALUES (?, ?, ?, ?)",
+                conn.execute(
+                    "INSERT INTO chat_history (user_id, question, answer, sources) VALUES (%s, %s, %s, %s)",
                     (user_id, question, response["answer"], json.dumps(response.get("sources", [])))
                 )
                 conn.commit()
-                conn.close()
             except Exception:
-                pass
+                app.logger.exception("Unable to persist chat history")
+            finally:
+                if conn is not None:
+                    conn.close()
 
         return jsonify(response)
     except Exception as e:
@@ -367,7 +369,7 @@ def chat_history_api():
     cursor = conn.cursor()
     try:
         cursor.execute(
-            "SELECT id, question, answer, sources, timestamp FROM chat_history WHERE user_id = ? ORDER BY id DESC LIMIT 20",
+            "SELECT id, question, answer, sources, timestamp FROM chat_history WHERE user_id = %s ORDER BY id DESC LIMIT 20",
             (user_id,)
         )
         rows = cursor.fetchall()
@@ -378,7 +380,7 @@ def chat_history_api():
                 "question": r["question"],
                 "answer": r["answer"],
                 "sources": json.loads(r["sources"]) if r["sources"] else [],
-                "timestamp": r["timestamp"]
+                "timestamp": r["timestamp"].isoformat() if r["timestamp"] else None
             })
         return jsonify({"history": history})
     finally:
@@ -460,4 +462,5 @@ def health():
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    debug = os.getenv("FLASK_DEBUG", "0").strip().lower() in {"1", "true", "yes"}
+    app.run(host="0.0.0.0", port=port, debug=debug, use_reloader=False)

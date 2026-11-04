@@ -19,20 +19,20 @@ def get_system_statistics() -> Dict[str, Any]:
     cursor = conn.cursor()
 
     try:
-        cursor.execute("SELECT COUNT(*) FROM users")
-        user_count = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) AS count FROM users")
+        user_count = cursor.fetchone()["count"]
 
-        cursor.execute("SELECT COUNT(*) FROM tax_profiles")
-        profile_count = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) AS count FROM tax_profiles")
+        profile_count = cursor.fetchone()["count"]
 
-        cursor.execute("SELECT COUNT(*) FROM tax_rules")
-        rules_count = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) AS count FROM tax_rules")
+        rules_count = cursor.fetchone()["count"]
 
-        cursor.execute("SELECT COUNT(*) FROM chat_history")
-        chat_count = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) AS count FROM chat_history")
+        chat_count = cursor.fetchone()["count"]
 
         cursor.execute("SELECT DISTINCT financial_year FROM tax_rules")
-        active_fys = [r[0] for r in cursor.fetchall()]
+        active_fys = [r["financial_year"] for r in cursor.fetchall()]
 
         return {
             "total_users": user_count,
@@ -55,7 +55,7 @@ def get_all_tax_rules(financial_year: Optional[str] = None) -> List[Dict[str, An
 
     try:
         if financial_year:
-            cursor.execute("SELECT * FROM tax_rules WHERE financial_year = ? ORDER BY id ASC", (financial_year,))
+            cursor.execute("SELECT * FROM tax_rules WHERE financial_year = %s ORDER BY id ASC", (financial_year,))
         else:
             cursor.execute("SELECT * FROM tax_rules ORDER BY financial_year DESC, id ASC")
 
@@ -71,7 +71,7 @@ def get_all_tax_rules(financial_year: Optional[str] = None) -> List[Dict[str, An
                 "limits": r["limits"],
                 "source": r["source"],
                 "effective_date": r["effective_date"],
-                "last_updated": r["last_updated"]
+                "last_updated": r["last_updated"].isoformat() if r["last_updated"] else None
             })
         return rules
     finally:
@@ -99,13 +99,13 @@ def add_or_update_tax_rule(rule_data: Dict[str, Any]) -> Dict[str, Any]:
         if rule_id:
             cursor.execute("""
             UPDATE tax_rules
-            SET financial_year = ?, rule_name = ?, rule_type = ?, conditions = ?, limits = ?, source = ?, effective_date = ?, last_updated = CURRENT_TIMESTAMP
-            WHERE id = ?
+            SET financial_year = %s, rule_name = %s, rule_type = %s, conditions = %s, limits = %s, source = %s, effective_date = %s, last_updated = CURRENT_TIMESTAMP
+            WHERE id = %s
             """, (fy, name, rtype, conditions, limits, source, effective_date, rule_id))
         else:
             cursor.execute("""
             INSERT INTO tax_rules (financial_year, rule_name, rule_type, conditions, limits, source, effective_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             """, (fy, name, rtype, conditions, limits, source, effective_date))
 
         conn.commit()
