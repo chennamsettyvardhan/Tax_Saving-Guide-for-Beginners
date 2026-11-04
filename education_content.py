@@ -4,7 +4,7 @@ Provides beginner-friendly structured learning resources, FAQs,
 and comprehensive document breakdowns without legal jargon.
 """
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 # Tax Education Center Topics (Specification Section 16)
 EDUCATION_TOPICS: List[Dict[str, Any]] = [
