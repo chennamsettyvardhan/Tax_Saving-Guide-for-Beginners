@@ -762,30 +762,77 @@ async function loadTaxDocuments() {
 
 function renderTaxDocuments(docs) {
     const container = document.getElementById('documents-cards-container');
-    if (!container) return;
+    const sectionContainer = document.getElementById('tax-section-cards-container');
+    const sections = docs.filter(document => document.kind === 'tax-section');
+    const generalDocuments = docs.filter(document => document.kind !== 'tax-section');
 
-    container.innerHTML = docs.map(d => `
-        <div class="doc-card">
-            <div>
-                <span class="edu-card-badge">${d.name}</span>
-                <h3>${d.full_title}</h3>
-                <p>${d.what_it_is}</p>
-                
-                <div class="doc-section-block">
-                    <strong>Why It's Important:</strong> ${d.why_important}
+    if (sectionContainer) {
+        sectionContainer.innerHTML = sections.map(section => {
+            const conditions = (section.conditions || []).map(condition => `<li>${escapeHTML(condition)}</li>`).join('');
+            const sourceUrl = escapeHTML(section.official_source_url || 'https://www.incometax.gov.in/iec/foportal/');
+            return `
+                <article class="doc-card tax-section-card">
+                    <div class="tax-section-card-heading">
+                        <span class="edu-card-badge">${escapeHTML(section.name)}</span>
+                        <span class="tax-regime-badge">${escapeHTML(section.regime || 'Check current regime')}</span>
+                    </div>
+                    <h3>${escapeHTML(section.full_title)}</h3>
+                    <p>${escapeHTML(section.what_it_is)}</p>
+                    <div class="doc-section-block"><strong>Why it matters:</strong> ${escapeHTML(section.why_important)}</div>
+                    <details class="tax-section-details">
+                        <summary>Eligibility, limits & records</summary>
+                        <div class="tax-section-detail-body">
+                            <p><strong>Who may qualify:</strong> ${escapeHTML(section.who_receives_it)}</p>
+                            <p><strong>Limit and scope:</strong> ${escapeHTML(section.what_it_contains)}</p>
+                            <strong>Conditions to check</strong>
+                            <ul>${conditions}</ul>
+                            <p><strong>Records to review:</strong> ${escapeHTML(section.records || 'Keep records supporting the claim.')}</p>
+                            <p><strong>When to review:</strong> ${escapeHTML(section.when_needed)}</p>
+                            <p class="tax-section-caution"><strong>Caution:</strong> ${escapeHTML(section.caution || 'Confirm current rules and personal eligibility.')}</p>
+                            <a href="${sourceUrl}" target="_blank" rel="noopener noreferrer">${escapeHTML(section.official_source || 'Income Tax Department portal')}</a>
+                        </div>
+                    </details>
+                </article>
+            `;
+        }).join('');
+
+        const sectionCount = document.getElementById('tax-section-count');
+        if (sectionCount) sectionCount.textContent = `${sections.length} sections`;
+    }
+
+    if (container) {
+        container.innerHTML = generalDocuments.map(document => `
+            <article class="doc-card">
+                <div>
+                    <span class="edu-card-badge">${escapeHTML(document.name)}</span>
+                    <h3>${escapeHTML(document.full_title)}</h3>
+                    <p>${escapeHTML(document.what_it_is)}</p>
+                    <div class="doc-section-block"><strong>Why it matters:</strong> ${escapeHTML(document.why_important)}</div>
+                    <div class="doc-section-block"><strong>Who uses it:</strong> ${escapeHTML(document.who_receives_it)}</div>
+                    <div class="doc-section-block"><strong>What it contains:</strong> ${escapeHTML(document.what_it_contains)}</div>
                 </div>
-                <div class="doc-section-block">
-                    <strong>Who Uses It:</strong> ${d.who_receives_it}
-                </div>
-                <div class="doc-section-block">
-                    <strong>Contents:</strong> ${d.what_it_contains}
-                </div>
-            </div>
-            <div style="margin-top: 1rem; font-size: 0.82rem; color: var(--text-muted);">
-                <strong>When Needed:</strong> ${d.when_needed}
-            </div>
-        </div>
-    `).join('');
+                <div class="doc-when-needed"><strong>When it may be needed:</strong> ${escapeHTML(document.when_needed)}</div>
+            </article>
+        `).join('');
+    }
+}
+
+function filterTaxDocuments(query) {
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) {
+        renderTaxDocuments(AppState.taxDocuments);
+        return;
+    }
+    const filtered = AppState.taxDocuments.filter(document =>
+        [document.name, document.full_title, document.what_it_is, document.why_important,
+            document.who_receives_it, document.what_it_contains, document.regime,
+            document.conditions?.join(' '), document.records, document.caution]
+            .filter(Boolean)
+            .join(' ')
+            .toLowerCase()
+            .includes(normalizedQuery)
+    );
+    renderTaxDocuments(filtered);
 }
 
 // =============================================================================

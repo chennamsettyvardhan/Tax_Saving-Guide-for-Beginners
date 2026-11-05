@@ -2077,3 +2077,57 @@ body.sidebar-open { overflow: hidden; }
     .main-content { padding: 16px 16px 38px; }
     .footer-main { margin-left: 0; }
 }
+
+.document-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 18px 0 28px;
+    padding: 14px 16px;
+    border: 1px solid #E1E8F0;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.document-search-bar label {
+    flex: 0 0 auto;
+    color: #43536B;
+    font-size: .73rem;
+    font-weight: 700;
+}
+
+.document-search-bar input {
+    width: min(100%, 430px);
+    min-height: 39px;
+    padding: 8px 11px;
+    border: 1px solid #D9E2ED;
+    border-radius: 7px;
+    color: var(--text-main);
+}
+
+.document-guide-group { margin: 28px 0 36px; }
+.document-group-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 15px; }
+.document-group-heading h3 { color: var(--primary-dark); font-size: 1.08rem; }
+.document-group-heading p { margin-top: 3px; color: var(--text-muted); font-size: .75rem; }
+.tax-section-card { justify-content: flex-start; gap: 8px; }
+.tax-section-card-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 7px; }
+.tax-section-card-heading .edu-card-badge { margin: 0; background: #EAF2FF; color: var(--primary); }
+.tax-regime-badge { color: #66768C; font-size: .62rem; font-weight: 650; }
+.tax-section-details { margin-top: 5px; padding-top: 10px; border-top: 1px solid #E9EEF4; color: #51627A; font-size: .72rem; }
+.tax-section-details summary { display: flex; align-items: center; justify-content: space-between; color: var(--primary); cursor: pointer; font-weight: 700; }
+.tax-section-details[open] summary { margin-bottom: 10px; }
+.tax-section-detail-body { display: flex; flex-direction: column; gap: 8px; }
+.tax-section-detail-body p { margin: 0; color: #596A81; font-size: .7rem; line-height: 1.6; }
+.tax-section-detail-body strong { color: #30425C; }
+.tax-section-detail-body ul { margin: 0; padding-left: 18px; color: #596A81; font-size: .68rem; }
+.tax-section-detail-body li { margin: 4px 0; }
+.tax-section-detail-body a { color: var(--primary); font-size: .68rem; font-weight: 700; }
+.tax-section-caution { padding: 8px 9px; border-left: 2px solid #F3BD55; background: #FFFBF1; }
+.doc-when-needed { margin-top: 12px; color: #65758B; font-size: .73rem; }
+
+@media (max-width: 640px) {
+    .document-search-bar { align-items: stretch; flex-direction: column; gap: 7px; padding: 12px; }
+    .document-search-bar input { width: 100%; }
+    .document-group-heading { align-items: flex-start; }
+}

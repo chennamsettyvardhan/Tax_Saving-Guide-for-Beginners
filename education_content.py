@@ -246,17 +246,207 @@ TAX_DOCUMENTS: List[Dict[str, Any]] = [
     }
 ]
 
+TAX_SECTION_GUIDES: List[Dict[str, Any]] = [
+    {
+        "id": "section-80c",
+        "kind": "tax-section",
+        "name": "Section 80C",
+        "full_title": "Specified investments and payments",
+        "what_it_is": "A combined deduction for certain eligible investments and payments, including PPF, EPF, ELSS, qualifying life-insurance premiums, and some tuition fees.",
+        "why_important": "It can reduce taxable income when the person, payment, and financial year meet the rules.",
+        "who_receives_it": "Eligible individuals and Hindu Undivided Families under the Old Tax Regime.",
+        "what_it_contains": "The combined annual deduction limit is generally ₹1,50,000. The New Tax Regime does not allow this deduction.",
+        "when_needed": "Review eligible contributions and payment records while estimating or preparing a return for the relevant year.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["Only specified investments and payments qualify.", "The combined limit applies across qualifying items.", "Confirm ownership, payment date, lock-in, and current-year rules."],
+        "records": "Investment statements, premium receipts, tuition receipts, and other records for the claimed item.",
+        "caution": "Do not invest solely for a deduction; consider suitability, risk, and lock-in.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-80ccd-1b",
+        "kind": "tax-section",
+        "name": "Section 80CCD(1B)",
+        "full_title": "Additional individual NPS contribution",
+        "what_it_is": "An additional deduction for an individual's eligible contribution to an NPS Tier-I account, separate from the Section 80C limit.",
+        "why_important": "It may provide a separate tax deduction for qualifying retirement contributions.",
+        "who_receives_it": "Eligible individuals contributing to NPS under the Old Tax Regime.",
+        "what_it_contains": "The additional deduction limit is generally ₹50,000 per year, subject to current rules.",
+        "when_needed": "Check contribution statements when estimating deductions or preparing a return.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["Contribution must be an eligible individual contribution to NPS Tier-I.", "Employer contributions are governed by a different provision.", "Check total contribution limits and current-year rules."],
+        "records": "NPS contribution statement or receipt showing the contributor, account, and financial year.",
+        "caution": "NPS has withdrawal and annuity conditions; review them before contributing.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-80d",
+        "kind": "tax-section",
+        "name": "Section 80D",
+        "full_title": "Health insurance and eligible medical payments",
+        "what_it_is": "A deduction for qualifying health-insurance premiums and specified health-related payments for self, family, and parents.",
+        "why_important": "Age and who is covered can change the applicable limit, so complete profile details matter.",
+        "who_receives_it": "Eligible individuals and Hindu Undivided Families under the Old Tax Regime.",
+        "what_it_contains": "Limits vary with the ages of the taxpayer, spouse, and parents. Preventive check-up amounts are subject to an overall limit.",
+        "when_needed": "Review policy and payment details when estimating deductions or preparing a return.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["The covered relationship and age affect applicable limits.", "Insurance premiums generally must be paid by a permitted non-cash method.", "Confirm which payments qualify for the financial year."],
+        "records": "Policy schedule, premium receipt, payment record, covered-person details, and eligible medical receipts where relevant.",
+        "caution": "An insurance policy or payment alone does not establish eligibility; check the current statutory conditions.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-80e",
+        "kind": "tax-section",
+        "name": "Section 80E",
+        "full_title": "Interest on an eligible higher-education loan",
+        "what_it_is": "A deduction for qualifying interest paid on a loan taken for higher education of self or a specified relative.",
+        "why_important": "Eligible loan interest may be deductible without the usual fixed monetary ceiling, subject to the time and borrower conditions.",
+        "who_receives_it": "Eligible individuals paying interest on a qualifying education loan under the Old Tax Regime.",
+        "what_it_contains": "The deduction is for interest, not loan principal, and is generally available for up to eight assessment years from the starting assessment year, subject to law.",
+        "when_needed": "Review the lender's annual interest certificate and repayment start date.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["Loan must be from a qualifying financial institution or approved charitable institution.", "The student and relationship must meet the statutory definition.", "Time limits and the year repayment starts affect the claim."],
+        "records": "Loan sanction letter, lender's interest certificate, repayment record, and proof of the qualifying relationship or course if requested.",
+        "caution": "Only qualifying interest payments are considered; verify the current provision and loan details.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-80g",
+        "kind": "tax-section",
+        "name": "Section 80G",
+        "full_title": "Donations to specified funds and institutions",
+        "what_it_is": "A deduction for eligible donations made to specified funds or approved charitable institutions.",
+        "why_important": "The deduction percentage and whether a qualifying limit applies depend on the recipient and donation.",
+        "who_receives_it": "Eligible taxpayers making qualifying donations under the Old Tax Regime.",
+        "what_it_contains": "Eligible donations may qualify at different percentages, with or without a qualifying limit. Cash donations above ₹2,000 do not qualify.",
+        "when_needed": "Check the recipient's eligibility and retain the donation receipt before claiming.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["The recipient fund or institution must qualify under current rules.", "Donation mode and amount affect eligibility.", "A donation cannot be claimed merely because the recipient is charitable."],
+        "records": "Receipt with recipient details, donation amount/date, payment mode, and any prescribed identification details.",
+        "caution": "Confirm the institution's approval status and the applicable deduction percentage for the year.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-80tta",
+        "kind": "tax-section",
+        "name": "Section 80TTA",
+        "full_title": "Interest on qualifying savings accounts",
+        "what_it_is": "A deduction for qualifying savings-account interest received from eligible banks, co-operative societies, or post offices.",
+        "why_important": "It may reduce taxable interest income for eligible non-senior taxpayers.",
+        "who_receives_it": "Eligible individuals and Hindu Undivided Families who are not claiming Section 80TTB, under the Old Tax Regime.",
+        "what_it_contains": "The deduction is generally capped at ₹10,000. Fixed-deposit interest is not covered by this provision.",
+        "when_needed": "Review savings-account interest totals when preparing a yearly income summary.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["Only qualifying savings-account interest is considered.", "Senior citizens generally review Section 80TTB instead.", "The deduction cannot exceed eligible interest or the statutory cap."],
+        "records": "Bank or post-office interest certificates and account statements.",
+        "caution": "Do not include fixed-deposit interest under this section; verify current eligibility.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-80ttb",
+        "kind": "tax-section",
+        "name": "Section 80TTB",
+        "full_title": "Specified interest income for senior citizens",
+        "what_it_is": "A deduction for specified deposit interest received by an eligible resident senior citizen.",
+        "why_important": "It can cover a broader set of specified deposit interest than Section 80TTA, subject to its own limit and conditions.",
+        "who_receives_it": "Eligible resident individuals aged 60 or older under the Old Tax Regime.",
+        "what_it_contains": "The deduction is generally capped at ₹50,000 for specified interest, subject to current law.",
+        "when_needed": "Review bank, co-operative bank, or post-office interest statements for the financial year.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["The taxpayer must meet the senior-citizen and residency conditions.", "Only specified deposit interest is included.", "The same interest cannot also be claimed under Section 80TTA."],
+        "records": "Age and residency details, deposit statements, and interest certificates.",
+        "caution": "Confirm the eligible deposit types and current-year limit before claiming.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-24b",
+        "kind": "tax-section",
+        "name": "Section 24(b)",
+        "full_title": "Interest on borrowed capital for house property",
+        "what_it_is": "A deduction for qualifying interest paid on borrowed capital for a house property, calculated under house-property rules.",
+        "why_important": "Property use, loan purpose, completion conditions, and tax regime can change the treatment.",
+        "who_receives_it": "Taxpayers meeting the house-property and borrowing conditions for the relevant regime.",
+        "what_it_contains": "For a qualifying self-occupied property under the Old Tax Regime, the limit is generally up to ₹2,00,000, subject to conditions. Let-out property treatment differs.",
+        "when_needed": "Use the lender's annual interest certificate and property details when computing house-property income.",
+        "regime": "Regime and property-use dependent; self-occupied interest is generally not deductible under the New Tax Regime.",
+        "conditions": ["The borrowing and property purpose must qualify.", "Self-occupied and let-out property calculations differ.", "Completion and loan-date conditions may apply."],
+        "records": "Loan sanction details, annual interest certificate, ownership details, and property-use information.",
+        "caution": "Do not treat the full EMI as interest; verify house-property set-off and regime rules for the year.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-80dd",
+        "kind": "tax-section",
+        "name": "Section 80DD",
+        "full_title": "Specified care and support for a dependent with disability",
+        "what_it_is": "A fixed deduction for qualifying care, treatment, training, or support arrangements for a dependent person with disability.",
+        "why_important": "The deduction is based on statutory disability and dependent conditions rather than simply the amount spent.",
+        "who_receives_it": "Eligible resident individuals or Hindu Undivided Families supporting a qualifying dependent, under the Old Tax Regime.",
+        "what_it_contains": "The deduction amount depends on the prescribed disability category and current-year law; severe disability has a different amount.",
+        "when_needed": "Review the dependent's disability certificate and qualifying expenditure or scheme records before filing.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["The dependent relationship and disability must meet the statutory definitions.", "A prescribed medical certificate is generally required.", "The dependent must not claim the same deduction personally under Section 80U."],
+        "records": "Prescribed disability certificate, dependent details, and receipts or eligible scheme documents.",
+        "caution": "Eligibility and deduction amount depend on statutory definitions and valid certification; seek professional help if unsure.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-80u",
+        "kind": "tax-section",
+        "name": "Section 80U",
+        "full_title": "Deduction for a taxpayer with disability",
+        "what_it_is": "A fixed deduction for an eligible resident individual taxpayer with a prescribed disability.",
+        "why_important": "Unlike dependent-care provisions, this section concerns the taxpayer's own qualifying disability.",
+        "who_receives_it": "Eligible resident individuals under the Old Tax Regime.",
+        "what_it_contains": "The deduction amount depends on the prescribed disability category and current-year law, not solely on actual expenses.",
+        "when_needed": "Check the taxpayer's disability certificate and applicable current-year criteria.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["The taxpayer must meet the statutory disability definition.", "A valid certificate from a prescribed medical authority is generally required.", "Do not confuse this self-claim with dependent claims under Section 80DD."],
+        "records": "Prescribed disability certificate and supporting identity/profile records.",
+        "caution": "Verify certification, disability category, and current deduction amount before claiming.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    },
+    {
+        "id": "section-80ddb",
+        "kind": "tax-section",
+        "name": "Section 80DDB",
+        "full_title": "Treatment of specified diseases",
+        "what_it_is": "A deduction for qualifying medical treatment costs for specified diseases for the taxpayer or an eligible dependent.",
+        "why_important": "It may provide relief for qualifying treatment, but limits depend on age, actual eligible cost, and reimbursements.",
+        "who_receives_it": "Eligible individuals or Hindu Undivided Families under the Old Tax Regime.",
+        "what_it_contains": "The allowable amount is limited by current statutory caps and may be reduced by insurance or employer reimbursement.",
+        "when_needed": "Check the eligible disease list and required medical prescription/certificate for the financial year.",
+        "regime": "Old Tax Regime only",
+        "conditions": ["Treatment must be for a disease specified in the rules.", "The patient relationship and age affect eligibility and limits.", "Reimbursements reduce the amount that may be claimed."],
+        "records": "Medical bills, prescriptions or certificates in the prescribed form, patient details, and reimbursement records.",
+        "caution": "Not every medical expense qualifies; verify the disease, certificate, age-based limit, and current rules.",
+        "official_source": "Income Tax Department e-Filing Portal",
+        "official_source_url": "https://www.incometax.gov.in/iec/foportal/"
+    }
+]
+
 
 def get_all_education_topics() -> List[Dict[str, Any]]:
     return EDUCATION_TOPICS
 
 
 def get_all_tax_documents() -> List[Dict[str, Any]]:
-    return TAX_DOCUMENTS
+    return TAX_DOCUMENTS + TAX_SECTION_GUIDES
 
 
 def get_document_by_id(doc_id: str) -> Optional[Dict[str, Any]]:
-    for d in TAX_DOCUMENTS:
+    for d in TAX_DOCUMENTS + TAX_SECTION_GUIDES:
         if d["id"] == doc_id or d["name"].lower() == doc_id.lower():
             return d
     return None

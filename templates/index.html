@@ -885,14 +885,33 @@
         <section id="view-documents" class="app-view">
             <div class="view-header">
                 <div>
-                    <h2>Tax Document Explainer</h2>
-                    <p class="subtitle">Learn what common Indian tax documents mean, who issues them, and why they matter</p>
+                    <h2>Tax Section & Document Guide</h2>
+                    <p class="subtitle">Understand common deductions, eligibility conditions, supporting records, and tax documents in plain language.</p>
                 </div>
             </div>
 
-            <div class="documents-grid" id="documents-cards-container">
-                <!-- Dynamically populated from /api/documents -->
+            <div class="document-search-bar">
+                <label for="document-guide-search">Search sections and documents</label>
+                <input type="search" id="document-guide-search" placeholder="Try 80C, medical expenses, loan interest..." oninput="filterTaxDocuments(this.value)">
             </div>
+
+            <section class="document-guide-group" aria-labelledby="tax-sections-heading">
+                <div class="document-group-heading">
+                    <div><h3 id="tax-sections-heading">Tax-saving sections</h3><p>Purpose, general eligibility, conditions, and records to check.</p></div>
+                    <span id="tax-section-count" class="badge badge-light">11 sections</span>
+                </div>
+                <div class="documents-grid" id="tax-section-cards-container" aria-live="polite"></div>
+            </section>
+
+            <section class="document-guide-group" aria-labelledby="tax-documents-heading">
+                <div class="document-group-heading">
+                    <div><h3 id="tax-documents-heading">Tax documents</h3><p>Common records used to understand or support your tax information.</p></div>
+                </div>
+                <div class="documents-grid" id="documents-cards-container" aria-live="polite">
+                <!-- Dynamically populated from /api/documents -->
+                </div>
+            </div>
+            </section>
         </section>
 
         <!-- ========================================================= -->

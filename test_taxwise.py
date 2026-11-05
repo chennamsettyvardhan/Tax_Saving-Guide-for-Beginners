@@ -208,6 +208,21 @@ class TestAPIEndpoints(unittest.TestCase):
         data = resp.get_json()
         self.assertTrue(len(data["documents"]) > 4)
 
+    def test_document_guide_includes_all_requested_tax_sections(self):
+        response = self.client.get("/api/documents")
+        documents = response.get_json()["documents"]
+        section_names = {document["name"] for document in documents if document.get("kind") == "tax-section"}
+        expected_sections = {
+            "Section 80C", "Section 80CCD(1B)", "Section 80D", "Section 80E",
+            "Section 80G", "Section 80TTA", "Section 80TTB", "Section 24(b)",
+            "Section 80DD", "Section 80U", "Section 80DDB"
+        }
+        self.assertTrue(expected_sections.issubset(section_names))
+        self.assertTrue(all(
+            document.get("conditions") and document.get("regime") and document.get("official_source_url")
+            for document in documents if document.get("kind") == "tax-section"
+        ))
+
     def test_admin_and_password_change_require_authorization(self):
         self.assertEqual(self.client.get("/api/admin/stats").status_code, 403)
         self.assertEqual(
