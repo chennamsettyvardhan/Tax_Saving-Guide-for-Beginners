@@ -8,7 +8,7 @@ The platform combines the **five mandatory architectural pillars**:
 3. **Rule-Based Tax Calculation Engine**: Versioned by Financial Year (`FY 2024-25` and `FY 2025-26`). Deterministic calculations that never rely on LLMs for financial arithmetic.
 4. **Personalized Tax-Saving Recommendation Engine**: Evaluates financial profiles against statutory rules and classifies opportunities into *Eligible*, *Potentially Eligible*, *Requires Additional Information*, and *Not Applicable*.
 5. **Explainable AI (XAI) Layer**: Visible "Why am I seeing this?" transparency expander detailing triggering inputs, rules, logic, and missing information for every recommendation.
-6. Live link https://taxsaving-guide-for-beginners99-j97jlmwnq.vercel.app/
+6. Live link : https://taxsaving-guide-for-beginners99.vercel.app/
 
 ---
 
